@@ -16,6 +16,7 @@ class GigyaResponse {
   String statusReason;
   int apiVersion;
   String regToken;
+  String idToken;
   dynamic mapped;
 
   Interruption getInterruption() {
@@ -39,6 +40,7 @@ class GigyaResponse {
         statusReason = json['statusReason'],
         apiVersion = json['apiVersion'],
         regToken = json['regToken'],
+        idToken = json['id_token'],
         mapped = json;
 
   Map<String, dynamic> toJson() {
@@ -105,7 +107,8 @@ class Account extends GigyaResponse {
     registered = json['registered'];
     registeredTimestamp = json['registeredTimestamp'];
     if (json['sessionInfo'] != null) {
-      sessionInfo = SessionInfo.fromJson(json['sessionInfo'].cast<String, dynamic>());
+      sessionInfo =
+          SessionInfo.fromJson(json['sessionInfo'].cast<String, dynamic>());
     }
     signatureTimestamp = json['signatureTimestamp'];
     socialProviders = json['socialProviders'];
@@ -165,7 +168,8 @@ class SessionInfo {
     return data;
   }
 
-  double get expirationTime => Platform.isIOS ? double.parse(expiresIn) : expiresIn;
+  double get expirationTime =>
+      Platform.isIOS ? double.parse(expiresIn) : expiresIn;
 }
 
 /// Account profile schema object.
@@ -333,7 +337,8 @@ class Profile {
     data['birthMonth'] = this.birthMonth;
     data['birthYear'] = this.birthYear;
     if (this.certifications != null) {
-      data['configurations'] = this.certifications.map((j) => j.toJson()).toList();
+      data['configurations'] =
+          this.certifications.map((j) => j.toJson()).toList();
     }
     if (this.education != null) {
       data['education'] = this.education.map((j) => j.toJson()).toList();
@@ -545,7 +550,8 @@ class Location {
     country = json['country'];
     state = json['state'];
     if (json['coordinates'] != null) {
-      coordinates = Coordinates.fromJson(json['coordinates'].cast<String, dynamic>());
+      coordinates =
+          Coordinates.fromJson(json['coordinates'].cast<String, dynamic>());
     }
   }
 
