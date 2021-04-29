@@ -7,12 +7,16 @@ import 'package:gigya_flutter_plugin/models/gigya_models.dart';
 
 class LoginWidthCredentialsWidget extends StatefulWidget {
   @override
-  _LoginWidthCredentialsWidgetState createState() => _LoginWidthCredentialsWidgetState();
+  _LoginWidthCredentialsWidgetState createState() =>
+      _LoginWidthCredentialsWidgetState();
 }
 
-class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidget> {
-  final TextEditingController _loginIdEditingController = TextEditingController();
-  final TextEditingController _passwordEditingController = TextEditingController();
+class _LoginWidthCredentialsWidgetState
+    extends State<LoginWidthCredentialsWidget> {
+  final TextEditingController _loginIdEditingController =
+      TextEditingController();
+  final TextEditingController _passwordEditingController =
+      TextEditingController();
   String _requestResult = '';
   bool _inProgress = false;
 
@@ -89,8 +93,10 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
                   minWidth: 240,
                   child: RaisedButton(
                     onPressed: () {
-                      final String loginId = _loginIdEditingController.text.trim();
-                      final String password = _passwordEditingController.text.trim();
+                      final String loginId =
+                          _loginIdEditingController.text.trim();
+                      final String password =
+                          _passwordEditingController.text.trim();
                       _sendLoginRequest(loginId, password);
                     },
                     textColor: Colors.white,
@@ -146,7 +152,9 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
     setState(() {
       _inProgress = true;
     });
-    GigyaSdk.instance.login(loginId, password).then((result) {
+    GigyaSdk.instance.login(loginId, password, params: {
+      'include': 'id_token',
+    }).then((result) {
       debugPrint(json.encode(result));
       final response = Account.fromJson(result);
       setState(() {
@@ -155,7 +163,8 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
       });
     }).catchError((error) {
       if (error.getInterruption() == Interruption.conflictingAccounts) {
-        LinkAccountResolver resolver = GigyaSdk.instance.resolverFactory.getResolver(error);
+        LinkAccountResolver resolver =
+            GigyaSdk.instance.resolverFactory.getResolver(error);
         _resolveLinkAccount(resolver);
       } else {
         setState(() {
@@ -180,7 +189,8 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
       });
     }).catchError((error) {
       if (error.getInterruption() == Interruption.conflictingAccounts) {
-        LinkAccountResolver resolver = GigyaSdk.instance.resolverFactory.getResolver(error);
+        LinkAccountResolver resolver =
+            GigyaSdk.instance.resolverFactory.getResolver(error);
         _resolveLinkAccount(resolver);
       } else {
         setState(() {
@@ -193,7 +203,8 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
 
   /// Resolving link account interruption.
   _resolveLinkAccount(LinkAccountResolver resolver) async {
-    final ConflictingAccounts conflictingAccounts = await resolver.getConflictingAccounts();
+    final ConflictingAccounts conflictingAccounts =
+        await resolver.getConflictingAccounts();
     if (conflictingAccounts.loginProviders.contains('site')) {
       // link to site.
       _showLinkToSiteBottomSheet(conflictingAccounts.loginID, resolver);
@@ -232,13 +243,15 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
                     minWidth: 240,
                     child: RaisedButton(
                       onPressed: () async {
-                        final String password = _linkPasswordController.text.trim();
+                        final String password =
+                            _linkPasswordController.text.trim();
                         resolver.linkToSite(loginId, password).then((res) {
                           final Account account = Account.fromJson(res);
 
                           setState(() {
                             _inProgress = false;
-                            _requestResult = 'Login success:\n\n ${account.uid}';
+                            _requestResult =
+                                'Login success:\n\n ${account.uid}';
                           });
                           Navigator.of(context).pop();
                         });
@@ -258,9 +271,9 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
   /// Show link account (social) bottom sheet.
   _showLinkToSocialBottomSheet(LinkAccountResolver resolver) {
     _scaffoldKey.currentState.showBottomSheet((context) => Material(
-      color: Colors.white,
-      elevation: 4,
-      child: Container(
+          color: Colors.white,
+          elevation: 4,
+          child: Container(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: ListView(
@@ -282,12 +295,15 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
                         icon: Image.asset('assets/facebook_new.png'),
                         iconSize: 50,
                         onPressed: () async {
-                          resolver.linkToSocial(SocialProvider.facebook).then((res) {
+                          resolver
+                              .linkToSocial(SocialProvider.facebook)
+                              .then((res) {
                             final Account account = Account.fromJson(res);
 
                             setState(() {
                               _inProgress = false;
-                              _requestResult = 'Login success:\n\n ${account.uid}';
+                              _requestResult =
+                                  'Login success:\n\n ${account.uid}';
                             });
                             Navigator.of(context).pop();
                           });
@@ -300,6 +316,6 @@ class _LoginWidthCredentialsWidgetState extends State<LoginWidthCredentialsWidge
               ),
             ),
           ),
-    ));
+        ));
   }
 }

@@ -52,6 +52,7 @@ class GigyaResponse {
     data['statusReason'] = statusReason;
     data['apiVersion'] = apiVersion;
     data['regToken'] = regToken;
+    data['idToken'] = idToken;
     data['mapped'] = mapped;
     return data;
   }
